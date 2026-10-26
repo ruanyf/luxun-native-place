@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#ebe7dc" />
+    <meta name="description" content="走进绍兴鲁迅故里，漫游江南台门、百草园与三味书屋，在可交互的 3D 场景中重读《从百草园到三味书屋》。" />
+    <title>鲁迅故里 · 3D 游学</title>
+  </head>
+  <body>
+    <svg class="svg-defs" aria-hidden="true">
+      <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 7h3l1.5-2h7L17 7h3v12H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+      <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.3 2.3 0 0 1 4.4 1c0 2-2.2 2-2.2 4M12 17.5v.1"/></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5"/></symbol>
+      <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5m5-5-5 5 5 5"/></symbol>
+      <symbol id="i-map" viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15m6-12v15"/></symbol>
+      <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="m10 21 1-6-3-3 2-5 4 3 3 1M11 15l4 2 2 4M8 12l-3 3"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M19 5l-1.5 1.5m-11 11L5 19"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7z"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M3 5c4-1 7 0 9 2v13c-2-2-5-3-9-2zm18 0c-4-1-7 0-9 2v13c2-2 5-3 9-2z"/></symbol>
+      <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></symbol>
+    </svg>
+
+    <main id="app">
+      <div id="scene-container" aria-label="鲁迅故里三维场景"></div>
+      <div class="scene-wash" aria-hidden="true"></div>
+      <div id="spatial-labels" aria-label="场景景点标记"></div>
+
+      <header class="topbar">
+        <button id="home-btn" class="brand" aria-label="返回景区全景">
+          <span class="brand-seal">鲁</span>
+          <span class="brand-name"><strong>鲁迅故里</strong><small>LU XUN NATIVE PLACE</small></span>
+        </button>
+        <div class="topbar-location"><span class="location-line"></span>浙江 · 绍兴<span class="location-coords">29.995° N&nbsp;&nbsp;120.581° E</span></div>
+        <div class="top-actions">
+          <button id="photos-btn" class="text-button"><svg><use href="#i-camera"/></svg><span>实景档案</span><b>03</b></button>
+          <button id="help-btn" class="icon-button" aria-label="查看操作指南"><svg><use href="#i-help"/></svg></button>
+        </div>
+      </header>
+
+      <aside id="landmark-panel" class="paper-panel landmark-panel">
+        <div class="eyebrow"><span></span>一条课本里的游学路</div>
+        <h1>从百草园<br />到三味书屋</h1>
+        <p class="panel-intro">穿过黛瓦白墙，走进鲁迅笔下的绍兴。</p>
+        <nav id="landmark-list" aria-label="选择景点"></nav>
+        <button id="tour-btn" class="tour-button"><span class="tour-icon"><svg><use href="#i-play"/></svg></span><span><strong>开启游学路线</strong><small>约 1 分钟 · 5 个景点</small></span><svg class="tour-arrow"><use href="#i-arrow"/></svg></button>
+      </aside>
+
+      <section id="story-card" class="paper-panel story-card" aria-live="polite">
+        <button id="story-toggle" class="story-toggle" aria-label="隐藏景点介绍" title="隐藏景点介绍"><svg><use href="#i-close"/></svg></button>
+        <div class="story-topline"><span id="story-number">02 / 05</span><span class="story-tag">景点志</span></div>
+        <h2 id="story-title">三味书屋</h2>
+        <p id="story-subtitle" class="story-subtitle">寿家台门 · 清末私塾</p>
+        <div class="ink-divider"><span></span>✦<span></span></div>
+        <p id="story-description"></p>
+        <blockquote id="story-quote"></blockquote>
+        <button id="story-action" class="primary-button"><span>进入三味书屋</span><svg><use href="#i-arrow"/></svg></button>
+        <p id="story-note" class="story-note"><span></span>可进入内部参观</p>
+      </section>
+      <button id="story-open" class="paper-panel story-open" aria-label="打开景点介绍" aria-expanded="false" aria-controls="story-card" hidden><svg><use href="#i-book"/></svg><span>景点介绍</span></button>
+
+      <nav id="interior-bar" class="interior-bar" aria-label="书屋内部导览" hidden>
+        <button id="exit-interior" class="interior-back"><svg><use href="#i-back"/></svg>返回景区</button>
+        <span class="interior-divider"></span>
+        <button class="interior-view active" data-view="overview">书屋全景</button>
+        <button class="interior-view" data-view="desk">鲁迅书桌</button>
+        <button class="interior-view" data-view="painting">松鹿图</button>
+      </nav>
+
+      <div id="orientation" class="orientation" aria-hidden="true"><span>北</span><svg viewBox="0 0 40 40"><path d="m20 5 5 23-5-4-5 4z"/><path class="compass-south" d="m20 35 5-23-5 4-5-4z"/></svg></div>
+
+      <aside id="minimap" class="paper-panel minimap" aria-label="景区导览小地图">
+        <div class="minimap-heading"><span><svg><use href="#i-map"/></svg>导览图</span><small>艺术化重构</small></div>
+        <svg id="minimap-svg" viewBox="0 0 240 156" role="img" aria-label="鲁迅故里景点相对位置">
+          <path class="map-water" d="M-10 119 Q55 108 108 119 T250 115 L250 139 Q174 145 120 136 T-10 142Z"/>
+          <path class="map-road" d="M7 83 Q90 77 234 84"/>
+          <path class="map-lane" d="M65 78 57 24m80 57 5-65m56 66 5-38"/>
+          <g class="map-buildings">
+            <path d="M31 46h40v23H31zM102 42h48v27h-48zM186 52h32v19h-32zM75 92h45v22H75zM110 8h57v25h-57z"/>
+          </g>
+          <path class="map-route" d="M51 82 95 103 128 82 140 24 200 83"/>
+          <g id="map-points"></g>
+          <g id="map-visitor" transform="translate(20 82)"><circle r="6" class="visitor-halo"/><circle r="2.5" class="visitor-dot"/></g>
+          <text x="9" y="132">河</text><text x="9" y="143">道</text><text x="201" y="18">北</text>
+        </svg>
+      </aside>
+
+      <div class="scene-caption"><span class="live-dot"></span><span id="scene-caption-text">绍兴 · 鲁迅故里历史文化街区</span></div>
+
+      <div class="toolbar paper-panel" role="toolbar" aria-label="三维场景控制">
+        <button id="overview-btn" class="tool-button active"><svg><use href="#i-map"/></svg><span>全景</span></button>
+        <span class="tool-separator"></span>
+        <button id="roam-btn" class="tool-button"><svg><use href="#i-walk"/></svg><span>漫游</span></button>
+        <span class="tool-separator"></span>
+        <button id="day-btn" class="tool-button"><svg><use href="#i-sun"/></svg><span>日景</span></button>
+      </div>
+
+      <div id="roam-tip" class="roam-tip" hidden><span></span>拖拽环视 · WASD / 方向键行走 · Esc 退出漫游</div>
+      <div id="mobile-pad" class="mobile-pad" hidden aria-label="触屏漫游方向控制">
+        <button data-key="KeyW" aria-label="向前">↑</button>
+        <div><button data-key="KeyA" aria-label="向左">←</button><button data-key="KeyS" aria-label="向后">↓</button><button data-key="KeyD" aria-label="向右">→</button></div>
+      </div>
+
+      <div id="toast" class="toast" role="status"></div>
+      <div id="transition" class="transition" aria-hidden="true"><span class="transition-seal">三味</span><p>推门入室，再读旧时光</p></div>
+
+      <div id="loading" class="loading-screen">
+        <div class="loading-mark"><span>鲁</span><i></i></div>
+        <p class="loading-kicker">LU XUN NATIVE PLACE</p>
+        <h2>一巷书香，故里绍兴</h2>
+        <div class="loading-track"><span></span></div>
+        <p class="loading-note">正在铺陈黛瓦、青石与旧时光</p>
+      </div>
+    </main>
+
+    <dialog id="photo-dialog" class="photo-dialog">
+      <div class="dialog-header"><div><span class="eyebrow">FIELD NOTES · 03</span><h2>实景档案</h2></div><button class="icon-button dialog-close" aria-label="关闭实景档案"><svg><use href="#i-close"/></svg></button></div>
+      <div class="photo-stage"><img id="archive-image" src="/images/sanwei-study.webp" alt="三味书屋内部实景" /><span id="archive-count">01 / 03</span></div>
+      <div class="archive-footer"><div><h3 id="archive-title">三味书屋 · 内部陈设</h3><p id="archive-caption">匾额、松鹿图与整齐排列的课桌椅，是本次室内重构的主要依据。</p></div><div class="archive-nav"><button id="archive-prev" aria-label="上一张照片">←</button><button id="archive-next" aria-label="下一张照片">→</button></div></div>
+      <div id="archive-thumbnails" class="archive-thumbnails"></div>
+      <p class="archive-disclaimer">实景照片由用户提供。模型依据公开导览资料与照片艺术化重构，非测绘级复原。</p>
+    </dialog>
+
+    <dialog id="help-dialog" class="help-dialog">
+      <div class="dialog-header"><div><span class="eyebrow">VISITOR GUIDE</span><h2>漫游指南</h2></div><button class="icon-button dialog-close" aria-label="关闭操作指南"><svg><use href="#i-close"/></svg></button></div>
+      <div class="help-grid">
+        <div><svg><use href="#i-map"/></svg><h3>全景导览</h3><p>拖拽旋转视角，滚轮或双指缩放。点击景点名称或场景标记即可前往。</p></div>
+        <div><svg><use href="#i-walk"/></svg><h3>步行漫游</h3><p>按住场景拖拽环视，使用 WASD 或方向键行走；手机可使用屏幕方向键。</p></div>
+        <div><svg><use href="#i-book"/></svg><h3>进入书屋</h3><p>选择三味书屋后点击“进入”，可走近鲁迅书桌，寻找桌上的“早”字。</p></div>
+      </div>
+      <p class="help-tip">小提示：漫游中按 Esc 可返回全景控制；日夜切换不会改变室内采光。</p>
+    </dialog>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
